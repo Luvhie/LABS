@@ -34,3 +34,36 @@ then
   exit 1
 
   fi
+./websvr_config_script.bash
+
+
+sudo apt update
+sudo apt install mysql-server
+sudo mysql_secure_installation
+n
+n
+n
+y
+sudo passwd
+sudo ufw allow 3306/tcp
+sudo ufw reload
+sudo mysql -u root -p 
+enter password
+CREATE DATABASE studentManagement;
+USE studentManagement;
+  CREATE TABLE students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT,
+    gender VARCHAR(10),
+    course VARCHAR(50)
+  );
+INSERT INTO studentInfo (id, name, age, gender, course) VALUES(123,'Ronald',21,'male','computer');
+INSERT INTO studentInfo (id, name, age, gender, course) VALUES(124,'Ndlovu',23,'male','computer');
+INSERT INTO studentInfo (id, name, age, gender, course) VALUES(125,'James',22,'male','engineering');
+INSERT INTO studentInfo (id, name, age, gender, course) VALUES(126,'Mandy',21,'female','fashion');
+INSERT INTO studentInfo (id, name, age, gender, course) VALUES(123,'Retha',20,'female','computer');
+SELECT * FROM studentInfo;
+
+Quit
+Exit
