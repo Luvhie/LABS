@@ -1,0 +1,144 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the virtual network"
+            },
+            "defaultValue": "vnet01"
+        },
+        "vnetlocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Location of the virtual network"
+            },
+            "defaultValue": "eastus"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "subnetOneName": "sandboxsubnet",
+        "subnetTwoName": "valuesubnet",
+        "NSG1Name": "nsg01",
+        "NSG2Name": "nsg02",
+        "vnet01NSG": "nsg03"
+    },
+    "resources": [
+        {
+            "name": "[parameters('vnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2024-03-01",
+            "location": "[parameters('vnetlocation')]",
+            "tags": {
+                "displayName": "[parameters('vnetName')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG1Name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG2Name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('vnet01NSG'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "192.168.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnetOneName')]",
+                        "properties": {
+                            "addressPrefix": "192.168.0.32/28",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG1Name'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[variables('subnetTwoName')]",
+                        "properties": {
+                            "addressPrefix": "192.168.0.48/28", 
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG2Name'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+     {
+        "name": "[variables('NSG1Name')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2024-03-01",
+        "location": "[parameters('vnetlocation')]",
+        "properties": {
+            "securityRules": [
+                {
+                    "name": "nsgRule1",
+                    "properties": {
+                        "description": "description",
+                        "protocol": "Tcp",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "*",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 100,
+                        "direction": "Inbound"
+                    }
+                }
+            ]
+        }
+     },
+  {
+    "name": "[variables('NSG2Name')]",
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2024-03-01",
+    "location": "[parameters('vnetlocation')]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "nsgRule1",
+                "properties": {
+                    "description": "description",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+  },
+{
+    "name": "[variables('vnet01NSG')]",
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2024-03-01",
+    "location": "[parameters('vnetlocation')]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "nsgRule1",
+                "properties": {
+                    "description": "description",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+}
+    ],
+    "outputs": {}
+}
